@@ -1,5 +1,7 @@
 package org.cardiffmet.utils;
 
+import org.cardiffmet.ui.LoginFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
