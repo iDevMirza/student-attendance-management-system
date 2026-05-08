@@ -9,6 +9,7 @@ import org.cardiffmet.models.StudentRecord;
 import org.cardiffmet.models.User;
 import org.cardiffmet.services.StudentRecordService;
 import org.cardiffmet.services.StudentRecordServiceImpl;
+import org.cardiffmet.utils.LogoutHelper;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +35,15 @@ public class HeadteacherDashboard extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Top bar with welcome message + logout button
+        JPanel topBar = new JPanel(new BorderLayout());
+        topBar.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+        JLabel welcome = new JLabel("Welcome, " + user.getName() + " (Headteacher)");
+        welcome.setFont(new Font("Arial", Font.BOLD, 13));
+        topBar.add(welcome, BorderLayout.WEST);
+        topBar.add(LogoutHelper.createLogoutButton(this), BorderLayout.EAST);
+        add(topBar, BorderLayout.NORTH);
+
         JTabbedPane tabs = new JTabbedPane();
         tabs.add("Add Teacher", createAddTeacherPanel());
         tabs.add("Add Student", createAddStudentPanel());
@@ -43,7 +53,7 @@ public class HeadteacherDashboard extends JFrame {
         tabs.add("Reports", createReportPanel());
         tabs.add("Student Records", createRecordsPanel());
 
-        add(tabs);
+        add(tabs, BorderLayout.CENTER);
     }
 
     private JPanel createAddTeacherPanel() {

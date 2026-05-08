@@ -6,6 +6,7 @@ import org.cardiffmet.exceptions.ValidationException;
 import org.cardiffmet.models.User;
 import org.cardiffmet.services.AttendanceService;
 import org.cardiffmet.services.AttendanceServiceImpl;
+import org.cardiffmet.utils.LogoutHelper;
 import org.cardiffmet.utils.ValidationUtil;
 
 import javax.swing.*;
@@ -33,11 +34,20 @@ public class TeacherDashboard extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Top bar with welcome + logout
+        JPanel topBar = new JPanel(new BorderLayout());
+        topBar.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+        JLabel welcome = new JLabel("Welcome, " + user.getName() + " (Teacher) | Class: " + assignedClass);
+        welcome.setFont(new Font("Arial", Font.BOLD, 13));
+        topBar.add(welcome, BorderLayout.WEST);
+        topBar.add(LogoutHelper.createLogoutButton(this), BorderLayout.EAST);
+        add(topBar, BorderLayout.NORTH);
+
         JTabbedPane tabs = new JTabbedPane();
         tabs.add("Take Attendance", createAttendancePanel());
         tabs.add("Class Report", createReportPanel());
 
-        add(tabs);
+        add(tabs, BorderLayout.CENTER);
     }
 
     private void loadAssignedClass() {

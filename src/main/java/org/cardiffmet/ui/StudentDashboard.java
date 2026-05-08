@@ -4,6 +4,7 @@ import org.cardiffmet.models.Student;
 import org.cardiffmet.models.User;
 import org.cardiffmet.services.AttendanceService;
 import org.cardiffmet.services.AttendanceServiceImpl;
+import org.cardiffmet.utils.LogoutHelper;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +25,15 @@ public class StudentDashboard extends JFrame{
         setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        // Top bar with welcome + logout
+        JPanel topBar = new JPanel(new BorderLayout());
+        topBar.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+        JLabel welcome = new JLabel("Welcome, " + user.getName() + " (Student) | Class: " + student.getClassName());
+        welcome.setFont(new Font("Arial", Font.BOLD, 13));
+        topBar.add(welcome, BorderLayout.WEST);
+        topBar.add(LogoutHelper.createLogoutButton(this), BorderLayout.EAST);
+        add(topBar, BorderLayout.NORTH);
 
         JPanel p = new JPanel(new BorderLayout(10, 10));
         p.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -53,6 +63,6 @@ public class StudentDashboard extends JFrame{
         summary.setText(String.format("Total: %d | Present: %d | Absent: %d | Percentage: %.2f%%",
                 total, present, absent, pct));
 
-        add(p);
+        add(p, BorderLayout.CENTER);
     }
 }
