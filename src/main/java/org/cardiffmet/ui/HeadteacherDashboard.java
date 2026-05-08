@@ -25,6 +25,9 @@ public class HeadteacherDashboard extends JFrame {
     private SchoolFacade facade;
     private StudentRecordService recordService;
 
+    private JComboBox<String> validateClassBox;
+    private JComboBox<String> notifyClassBox;
+
     public HeadteacherDashboard(User user) {
         this.user = user;
         this.facade = new SchoolFacade();
@@ -77,6 +80,8 @@ public class HeadteacherDashboard extends JFrame {
                 facade.addTeacher(idF.getText().trim(), nameF.getText().trim(), emailF.getText().trim());
                 JOptionPane.showMessageDialog(this, "Teacher added!");
                 idF.setText(""); nameF.setText(""); emailF.setText("");
+                // Refresh all dropdowns/tables that depend on teacher data
+                refreshAllData();
             } catch (ValidationException | InvalidUserException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
@@ -104,6 +109,18 @@ public class HeadteacherDashboard extends JFrame {
 
         JButton btn = new JButton("Add Student");
         p.add(new JLabel()); p.add(btn);
+
+        // Refresh classes when this panel becomes visible
+        p.addAncestorListener(new javax.swing.event.AncestorListener() {
+            @Override
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                loadClassesIntoCombo(classBox);
+            }
+            @Override
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            @Override
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
 
         btn.addActionListener(e -> {
             try {
@@ -142,6 +159,19 @@ public class HeadteacherDashboard extends JFrame {
         p.add(new JScrollPane(table), BorderLayout.CENTER);
         loadClassesIntoTable(model);
 
+        // Refresh teacher dropdown and class table when panel becomes visible
+        p.addAncestorListener(new javax.swing.event.AncestorListener() {
+            @Override
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                loadTeachersIntoCombo(teacherBox);
+                loadClassesIntoTable(model);
+            }
+            @Override
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            @Override
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+
         btn.addActionListener(e -> {
             try {
                 facade.createClass(classF.getText().trim(),
@@ -149,6 +179,8 @@ public class HeadteacherDashboard extends JFrame {
                 JOptionPane.showMessageDialog(this, "Class created!");
                 classF.setText("");
                 loadClassesIntoTable(model);
+                // Also refresh other tabs that depend on class data
+                refreshAllData();
             } catch (ValidationException | InvalidUserException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
@@ -162,8 +194,9 @@ public class HeadteacherDashboard extends JFrame {
         JPanel p = new JPanel(new BorderLayout(10, 10));
         p.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JComboBox<String> classBox = new JComboBox<>();
-        loadClassesIntoCombo(classBox);
+        validateClassBox = new JComboBox<>();
+        loadClassesIntoCombo(validateClassBox);
+        JComboBox<String> classBox = validateClassBox;
 
         DefaultTableModel model = new DefaultTableModel(
                 new String[]{"ID", "StudentID", "Name", "Date", "Status", "Validated"}, 0);
@@ -236,8 +269,9 @@ public class HeadteacherDashboard extends JFrame {
         JPanel p = new JPanel(new BorderLayout(10, 10));
         p.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JComboBox<String> classBox = new JComboBox<>();
-        loadClassesIntoCombo(classBox);
+        notifyClassBox = new JComboBox<>();
+        loadClassesIntoCombo(notifyClassBox);
+        JComboBox<String> classBox = notifyClassBox;
         JTextField dateF = new JTextField(java.time.LocalDate.now().toString());
 
         JPanel top = new JPanel(new GridLayout(2, 2, 10, 10));
@@ -388,5 +422,11 @@ public class HeadteacherDashboard extends JFrame {
                 model.addRow(new Object[]{rs.getString("class_name"), rs.getString("teacher_id")});
             }
         } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    // Refreshes all dropdowns across all tabs
+    private void refreshAllData() {
+        if (validateClassBox != null) loadClassesIntoCombo(validateClassBox);
+        if (notifyClassBox != null) loadClassesIntoCombo(notifyClassBox);
     }
 }
