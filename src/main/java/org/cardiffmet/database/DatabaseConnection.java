@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
-    private static final String DB_URL = "jdbc:sqlite:attendance.db";
+    private static final String DB_URL = "jdbc:sqlite:attendance_management.db";
 
     private DatabaseConnection() {
         try {
@@ -70,7 +70,7 @@ public class DatabaseConnection {
     private void insertDefaultHeadteacher() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("INSERT OR IGNORE INTO users VALUES " +
-                "('HDT01', 'Admin', 'admin@school.com', 'admin123', 'HEADTEACHER', NULL)");
+                "('HDT01', 'Headteacher', 'headteacher@school.com', 'HDT01', 'HEADTEACHER', NULL)");
         statement.close();
     }
 }
