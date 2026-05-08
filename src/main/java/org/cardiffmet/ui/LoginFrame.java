@@ -16,7 +16,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         facade = new SchoolFacade();
 
-        setTitle("Smart Attendance System - Login");
+        setTitle("Smart Attendance Management System - Login");
         setSize(400, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -39,10 +39,6 @@ public class LoginFrame extends JFrame {
         JButton loginBtn = new JButton("Login");
         panel.add(new JLabel());
         panel.add(loginBtn);
-
-        JLabel info = new JLabel("Default: H001 / admin123", SwingConstants.CENTER);
-        info.setForeground(Color.GRAY);
-        panel.add(info);
 
         loginBtn.addActionListener(e -> doLogin());
         add(panel);
