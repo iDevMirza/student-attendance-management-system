@@ -28,7 +28,7 @@ public class SchoolFacade {
         subject.addObserver(new ParentNotifier());
     }
 
-    // Add a new teacher with full validation
+
     public void addTeacher(String id, String name, String email)
             throws ValidationException, InvalidUserException {
         ValidationUtil.validateId(id, "Teacher ID");
@@ -49,7 +49,6 @@ public class SchoolFacade {
         }
     }
 
-    // Add a new student with full validation
     public void addStudent(String id, String name, String parentEmail, String className)
             throws ValidationException, InvalidUserException {
         ValidationUtil.validateId(id, "Student ID");
@@ -73,7 +72,6 @@ public class SchoolFacade {
         }
     }
 
-    // Create a class with assigned teacher
     public void createClass(String className, String teacherId)
             throws ValidationException, InvalidUserException {
         ValidationUtil.validateNotEmpty(className, "Class name");
@@ -88,7 +86,6 @@ public class SchoolFacade {
         }
     }
 
-    // Authenticate user — single call hides DB and Factory complexity
     public User authenticate(String id, String password, String role)
             throws InvalidUserException {
         try {
@@ -114,7 +111,6 @@ public class SchoolFacade {
         }
     }
 
-    // Notify all parents of a class for a given date
     public int notifyParents(String className, String date) throws ValidationException {
         ValidationUtil.validateDate(date);
         ValidationUtil.validateNotEmpty(className, "Class");
